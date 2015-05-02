@@ -107,7 +107,7 @@ class ViewController: UIViewController {
         button.setTitleColor(UIColor.blueColor(), forState: .Normal)
         
         //タップした状態のテキスト
-        button.setTitle("z", forState: .Highlighted)
+        button.setTitle(title, forState: .Highlighted)
         
         //タップした状態の色
         button.setTitleColor(UIColor.redColor(), forState: .Highlighted)
