@@ -10,9 +10,21 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    // Labelを定義
+    var myLabel:UILabel?
+    
+    // 前回入力した数値を覚えておくための変数
+    var number:Int? = 0
+//    var number2:Int?
+    
+    //どの四則演算を行うか覚えておくための変数
+    var operate:String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+
+        
 
         
         let button1 = makeButtonToAddView("AC", x:47.5, y:198);
@@ -78,47 +90,142 @@ class ViewController: UIViewController {
 
         //サイズ変更
         button17.frame = CGRectMake(0, 0, 188, 94)
-        
+
+        //テキストの位置変更
+//        button17.
+
         //配置場所
         button17.layer.position = CGPoint(x:95, y:578)
 
         
         // Labelを作成.
-        let myLabel: UILabel = UILabel(frame: CGRectMake(0,0,375,197))
+        myLabel = UILabel(frame: CGRectMake(0,0,375,197))
         
-        // 背景をオレンジ色にする.
-        myLabel.backgroundColor = UIColor(red: 124/255, green: 120/255, blue: 120/255, alpha: 1.0)
+        // 背景をグレーにする.
+        myLabel?.backgroundColor = UIColor(red: 124/255, green: 120/255, blue: 120/255, alpha: 1.0)
         
-        // 枠を丸くする.
-        myLabel.layer.masksToBounds = false
+        // 枠を丸くしない.
+        myLabel?.layer.masksToBounds = false
         
-        // コーナーの半径.
-        myLabel.layer.cornerRadius = 20.0
+        // 枠を丸くした場合のコーナーの半径.
+        myLabel?.layer.cornerRadius = 20.0
+        
+        // Labelの文字の大きさを変更.
+        myLabel?.font = UIFont(name : "Arial", size: 50);
+
+//        
+        // はみ出し文字処理
+
+//        myLabel.adjustsFontSizeToFitWidth = YES;     // はみ出したらフォントサイズを自動で小さく
+//        //                                  　　NO      // 頭と末尾を残して間を・・・で省略表示
+//        // 縮小する場合の最小サイズ"
+//        myLabel.minimumFontSize = 10.0;              // 指定した大きさ(10.0pt)より小さくしない設定
+
+        
         
         // Labelに文字を代入.
-        myLabel.text = "計算結果"
+        myLabel?.text = "";
         
         // 文字の色を白にする.
-        myLabel.textColor = UIColor.whiteColor()
+        myLabel?.textColor = UIColor.whiteColor()
         
         // 文字の影の色をグレーにする.
-        myLabel.shadowColor = UIColor.grayColor()
+        myLabel?.shadowColor = UIColor.grayColor()
         
-        // Textを中央寄せにする.
-        myLabel.textAlignment = NSTextAlignment.Center
+        // Textを右寄せにする.
+        myLabel?.textAlignment = NSTextAlignment.Right
         
         // 配置する座標を設定する.
-        myLabel.layer.position = CGPoint(x: self.view.bounds.width/2,y: 50)
+        myLabel?.layer.position = CGPoint(x: self.view.bounds.width/2,y: 50)
         
         // ViewにLabelを追加.
-        self.view.addSubview(myLabel)
+        self.view.addSubview(myLabel!)
         
         
     }
     
     
     func tapped(button :UIButton){
-        NSLog("tapped")
+
+
+        NSLog("%@", button.titleLabel!.text!)
+        
+        // Labelに文字を代入
+        if (button.titleLabel!.text! == "AC") {
+
+            myLabel?.text? = ""
+            operate = ""
+            number = 0
+            
+        } else if (button.titleLabel!.text! == "+" ) {
+            
+            number = (myLabel!.text! as NSString).integerValue
+            myLabel?.text? = ""
+            operate = "+"
+            
+        } else if (button.titleLabel!.text! == "-" ) {
+            
+            number = (myLabel!.text! as NSString).integerValue
+            myLabel?.text? = ""
+            operate = "-"
+            
+        } else if (button.titleLabel!.text! == "×" ) {
+            
+            number = (myLabel!.text! as NSString).integerValue
+            myLabel?.text? = ""
+            operate = "×"
+            
+        } else if (button.titleLabel!.text! == "÷" ) {
+            
+            number = (myLabel!.text! as NSString).integerValue
+            myLabel?.text? = ""
+            operate = "÷"
+            
+        } else if (button.titleLabel!.text! == "%" ) {
+            
+            let number2 = (myLabel!.text! as NSString).doubleValue
+            let result = number2 / 100.0
+            myLabel?.text?  = String(format: "%.2f", result)
+
+        } else if (button.titleLabel!.text! == "=" ) {
+            
+            if (operate == "+") {
+                
+                let number2 = (myLabel!.text! as NSString).integerValue
+                let result = number! + number2
+                myLabel?.text? = String(format: "%d", result)
+                operate = ""
+
+            } else if (operate == "-") {
+                
+                let number2 = (myLabel!.text! as NSString).integerValue
+                let result = number! - number2
+                myLabel?.text? = String(format: "%d", result)
+                operate = ""
+
+            } else if (operate == "×") {
+
+                let number2 = (myLabel!.text! as NSString).integerValue
+                let result = number! * number2
+                myLabel?.text?  = String(format: "%d", result)
+                operate = ""
+ 
+            } else if (operate == "÷") {
+                
+                let number2 = (myLabel!.text! as NSString).integerValue
+                let result = number! / number2
+                myLabel?.text?  = String(format: "%d", result)
+                operate = ""
+                
+            }
+
+            
+        } else {
+            
+            myLabel?.text? += button.titleLabel!.text!
+            
+        }
+        
     }
     
     func makeButtonToAddView(title:String, x:CGFloat, y:CGFloat) -> UIButton {
@@ -132,6 +239,9 @@ class ViewController: UIViewController {
         //テキストの色
         button.setTitleColor(UIColor.blackColor(), forState: .Normal)
         
+        // 文字の大きさを変更.
+        button.titleLabel?.font = UIFont(name: "Arial", size: 40)
+
         //タップした状態のテキスト
         button.setTitle(title, forState: .Highlighted)
         
